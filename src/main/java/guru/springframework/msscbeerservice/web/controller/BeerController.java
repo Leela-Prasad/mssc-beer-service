@@ -5,12 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequestMapping("/api/v1/beer")
 @RestController
 public class BeerController {
 
     @PostMapping
-    public ResponseEntity saveBeer(@RequestBody BeerDto beerDto) {
+    public ResponseEntity saveBeer(@Valid @RequestBody BeerDto beerDto) {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
@@ -20,7 +22,7 @@ public class BeerController {
     }
 
     @PutMapping("/{beerId}")
-    public ResponseEntity updateBeerById(@PathVariable("beerId") String beerId, @RequestBody BeerDto beerDto) {
+    public ResponseEntity updateBeerById(@PathVariable("beerId") String beerId, @Valid @RequestBody BeerDto beerDto) {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
