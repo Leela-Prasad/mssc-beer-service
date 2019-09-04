@@ -17,8 +17,8 @@ import java.util.UUID;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // *** Here we have to use static imports like get, post,put from RestDocumentationRequestBuilders
@@ -45,19 +45,50 @@ class BeerControllerTest {
         mockMvc.perform(post("/api/v1/beer")
                         .content(beerDtoJsonString)
                         .contentType(MediaType.APPLICATION_JSON)
-                        ).andExpect(status().isCreated());
+                        )
+                        .andExpect(status().isCreated())
+                        .andDo(document("v1/beer",
+                                        requestFields(
+                                            fieldWithPath("id").ignored(),
+                                            fieldWithPath("version").ignored(),
+                                            fieldWithPath("beerStyle").description("Beer Style"),
+                                            fieldWithPath("price").description("Price of the Beer"),
+                                            fieldWithPath("upc").description("Beer UPC"),
+                                            fieldWithPath("quantityOnHand").ignored(),
+                                            fieldWithPath("createdDate").ignored(),
+                                            fieldWithPath("lastModifiedDate").ignored(),
+                                            fieldWithPath("beerName").description("Name of the Beer")
+                                        )
+                                        ));
 
     }
 
     @Test
     void getBeerById() throws Exception {
         mockMvc.perform(get("/api/v1/beer/{beerId}" , UUID.randomUUID())
+                        .param("isCold", "yes")
                         .contentType(MediaType.APPLICATION_JSON)
-        )
+                )
                 .andExpect(status().isOk())
-                .andDo(document("v1/beer", pathParameters(
-                    parameterWithName("beerId").description("UUID of desired beer to get")
-                )));
+                .andDo(document("v1/beer",
+                        pathParameters(
+                            parameterWithName("beerId").description("UUID of desired beer to get")
+                        ),
+                        requestParameters(
+                            parameterWithName("isCold").description("Is Beer Cold Query Parameter")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").description("Id of the Beer"),
+                                fieldWithPath("version").description("Version of the Beer"),
+                                fieldWithPath("beerName").description("Beer Name"),
+                                fieldWithPath("beerStyle").description("Beer Style"),
+                                fieldWithPath("price").description("price of the Beer"),
+                                fieldWithPath("upc").description("UPC"),
+                                fieldWithPath("quanityOnHand").description("Beer Stock"),
+                                fieldWithPath("createdDate").description("When this Beer is created"),
+                                fieldWithPath("lastModifiedDate").description("When this Beer is Updated")
+                        )
+                ));
     }
 
     @Test
