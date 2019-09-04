@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -84,17 +85,25 @@ class BeerControllerTest {
                             parameterWithName("isCold").description("Is Beer Cold Query Parameter")
                         ),
                         responseFields(
-                                fieldWithPath("id").description("Id of the Beer"),
-                                fieldWithPath("version").description("Version of the Beer"),
-                                fieldWithPath("beerName").description("Beer Name"),
-                                fieldWithPath("beerStyle").description("Beer Style"),
-                                fieldWithPath("price").description("price of the Beer"),
-                                fieldWithPath("upc").description("UPC"),
-                                fieldWithPath("quantityOnHand").description("Beer Stock"),
-                                fieldWithPath("createdDate").description("When this Beer is created"),
-                                fieldWithPath("lastModifiedDate").description("When this Beer is Updated")
+                                fieldWithPath("id").description("Id of the Beer").type(UUID.class),
+                                fieldWithPath("version").description("Version of the Beer").type(Integer.class),
+                                fieldWithPath("beerName").description("Beer Name").type(String.class),
+                                fieldWithPath("beerStyle").description("Beer Style").type(String.class),
+                                fieldWithPath("price").description("price of the Beer").type(String.class),
+                                fieldWithPath("upc").description("UPC").type(Long.class),
+                                fieldWithPath("quantityOnHand").description("Beer Stock").type(Integer.class),
+                                fieldWithPath("createdDate").description("When this Beer is created").type(OffsetDateTime.class),
+                                fieldWithPath("lastModifiedDate").description("When this Beer is Updated").type(OffsetDateTime.class)
                         )
                 ));
+    }
+
+    @Test
+    public void getBeerById2() throws Exception {
+        mockMvc.perform(get("/api/v1/beer/{beerId}" , UUID.randomUUID())
+                .param("isCold", "yes")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
     }
 
     @Test
