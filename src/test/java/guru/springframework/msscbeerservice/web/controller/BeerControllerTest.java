@@ -4,17 +4,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.msscbeerservice.web.model.BeerDto;
 import guru.springframework.msscbeerservice.web.model.BeerStyleEnum;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// *** Here we have to use static imports like get, post,put from RestDocumentationRequestBuilders
+// instead of MockMvcRequestBuilders
+//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
+@ExtendWith(RestDocumentationExtension.class)
+// This will auto configure mock mvc to use rest docs
+@AutoConfigureRestDocs
 @WebMvcTest(BeerController.class)
 class BeerControllerTest {
 
@@ -38,9 +51,13 @@ class BeerControllerTest {
 
     @Test
     void getBeerById() throws Exception {
-        mockMvc.perform(get("/api/v1/beer/" + UUID.randomUUID())
+        mockMvc.perform(get("/api/v1/beer/{beerId}" , UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk());
+        )
+                .andExpect(status().isOk())
+                .andDo(document("v1/beer", pathParameters(
+                    parameterWithName("beerId").description("UUID of desired beer to get")
+                )));
     }
 
     @Test
