@@ -1,5 +1,9 @@
 package guru.springframework.msscbeerservice.web.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -17,6 +23,7 @@ import java.util.UUID;
 public class BeerDto {
 
     // These needs to set by Persistence Layer
+    @JsonProperty("beerId")
     @Null
     private UUID id;
 
@@ -33,6 +40,7 @@ public class BeerDto {
 
     @Positive
     @NotNull
+    @JsonFormat(shape= JsonFormat.Shape.STRING)
     private BigDecimal price;
 
     @Positive
@@ -49,4 +57,8 @@ public class BeerDto {
     // These needs to set by Persistence Layer
     @Null
     private OffsetDateTime lastModifiedDate;
+
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate myLocalDate;
 }

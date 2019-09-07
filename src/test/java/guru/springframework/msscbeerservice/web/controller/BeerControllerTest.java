@@ -56,7 +56,7 @@ class BeerControllerTest {
                         .andExpect(status().isCreated())
                         .andDo(document("v1/beer-new",
                                         requestFields(
-                                                fields.withPath("id").ignored(),
+                                                fields.withPath("beerId").ignored(),
                                                 fields.withPath("version").ignored(),
                                                 fields.withPath("beerStyle").description("Beer Style"),
                                                 fields.withPath("price").description("Price of the Beer"),
@@ -64,7 +64,8 @@ class BeerControllerTest {
                                                 fields.withPath("quantityOnHand").ignored(),
                                                 fields.withPath("createdDate").ignored(),
                                                 fields.withPath("lastModifiedDate").ignored(),
-                                                fields.withPath("beerName").description("Name of the Beer")
+                                                fields.withPath("beerName").description("Name of the Beer"),
+                                                fields.withPath("myLocalDate").ignored()
                                         )
                                         ));
 
@@ -85,7 +86,7 @@ class BeerControllerTest {
                             parameterWithName("isCold").description("Is Beer Cold Query Parameter")
                         ),
                         responseFields(
-                                fieldWithPath("id").description("Id of the Beer").type(UUID.class),
+                                fieldWithPath("beerId").description("Id of the Beer").type(UUID.class),
                                 fieldWithPath("version").description("Version of the Beer").type(Integer.class),
                                 fieldWithPath("beerName").description("Beer Name").type(String.class),
                                 fieldWithPath("beerStyle").description("Beer Style").type(String.class),
@@ -93,7 +94,8 @@ class BeerControllerTest {
                                 fieldWithPath("upc").description("UPC").type(Long.class),
                                 fieldWithPath("quantityOnHand").description("Beer Stock").type(Integer.class),
                                 fieldWithPath("createdDate").description("When this Beer is created").type(OffsetDateTime.class),
-                                fieldWithPath("lastModifiedDate").description("When this Beer is Updated").type(OffsetDateTime.class)
+                                fieldWithPath("lastModifiedDate").description("When this Beer is Updated").type(OffsetDateTime.class),
+                                fieldWithPath("myLocalDate").ignored()
                         )
                 ));
     }
