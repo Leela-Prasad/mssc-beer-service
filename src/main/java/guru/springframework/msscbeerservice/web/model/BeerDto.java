@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -43,9 +42,8 @@ public class BeerDto {
     @JsonFormat(shape= JsonFormat.Shape.STRING)
     private BigDecimal price;
 
-    @Positive
     @NotNull
-    private Long upc;
+    private String upc;
 
     @Positive
     private Integer quantityOnHand;

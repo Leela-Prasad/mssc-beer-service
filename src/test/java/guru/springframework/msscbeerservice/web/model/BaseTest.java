@@ -1,11 +1,11 @@
 package guru.springframework.msscbeerservice.web.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import guru.springframework.msscbeerservice.bootstrap.BeerLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ public class BaseTest {
                         .createdDate(OffsetDateTime.now())
                         .lastModifiedDate(OffsetDateTime.now())
                         .price(new BigDecimal("12.9"))
-                        .upc(124948984L)
+                        .upc(BeerLoader.BEER_1_UPC)
                         .myLocalDate(LocalDate.now())
                         .build();
     }
