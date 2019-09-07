@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Component
 public class BeerLoader implements CommandLineRunner {
 
-    private BeerRepository beerRepository;
+    private final BeerRepository beerRepository;
 
     public BeerLoader(BeerRepository beerRepository) {
         this.beerRepository = beerRepository;
