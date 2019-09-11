@@ -31,12 +31,17 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public BeerDto getBeerById(UUID beerId) {
-        return beerMapper.beerToBeerDto(beerRepository.findById(beerId).orElseThrow(() -> new NotFoundException()));
+    public BeerDto getBeerById(UUID beerId, Boolean showInventoryOnHand) {
+        if(showInventoryOnHand) {
+            return beerMapper.beerToBeerDtoWithInventory(beerRepository.findById(beerId).orElseThrow(() -> new NotFoundException()));
+        }else {
+            return beerMapper.beerToBeerDto(beerRepository.findById(beerId).orElseThrow(() -> new NotFoundException()));
+        }
+
     }
 
     @Override
-    public BeerPagedList listBeers(String beerName, BeerStyleEnum beerStyle, PageRequest pageRequest) {
+    public BeerPagedList listBeers(String beerName, BeerStyleEnum beerStyle, PageRequest pageRequest, Boolean showInventoryOnHand) {
 
         Page<Beer> beerPage;
 
@@ -50,11 +55,20 @@ public class BeerServiceImpl implements BeerService {
             beerPage = beerRepository.findAll(pageRequest);
         }
 
-        return new BeerPagedList(beerPage.getContent().stream()
-                .map(beerMapper::beerToBeerDto)
-                .collect(Collectors.toList())
-                , PageRequest.of(beerPage.getNumber()
-                , beerPage.getSize()), beerPage.getTotalElements());
+        if(showInventoryOnHand) {
+            return new BeerPagedList(beerPage.getContent().stream()
+                    .map(beerMapper::beerToBeerDtoWithInventory)
+                    .collect(Collectors.toList())
+                    , PageRequest.of(beerPage.getNumber()
+                    , beerPage.getSize()), beerPage.getTotalElements());
+        }else {
+            return new BeerPagedList(beerPage.getContent().stream()
+                    .map(beerMapper::beerToBeerDto)
+                    .collect(Collectors.toList())
+                    , PageRequest.of(beerPage.getNumber()
+                    , beerPage.getSize()), beerPage.getTotalElements());
+        }
+
     }
 
     @Override

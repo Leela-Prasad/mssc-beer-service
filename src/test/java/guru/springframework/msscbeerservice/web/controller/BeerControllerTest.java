@@ -23,6 +23,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -84,10 +85,11 @@ class BeerControllerTest {
     @Test
     void getBeerById() throws Exception {
 
-        when(beerService.getBeerById(any())).thenReturn(getValidBeerDto());
+        when(beerService.getBeerById(any(UUID.class),anyBoolean())).thenReturn(getValidBeerDto());
 
         mockMvc.perform(get("/api/v1/beer/{beerId}" , UUID.randomUUID())
                         .param("isCold", "yes")
+                        .param("showInventoryOnHand", "false")
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
@@ -96,7 +98,8 @@ class BeerControllerTest {
                             parameterWithName("beerId").description("UUID of desired beer to get")
                         ),
                         requestParameters(
-                            parameterWithName("isCold").description("Is Beer Cold Query Parameter")
+                            parameterWithName("isCold").description("Is Beer Cold Query Parameter"),
+                            parameterWithName("showInventoryOnHand").description("Filter to fetch Inventory Information")
                         ),
                         responseFields(
                                 fieldWithPath("beerId").description("Id of the Beer").type(UUID.class),
