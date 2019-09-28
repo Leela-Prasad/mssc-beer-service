@@ -22,8 +22,8 @@ public class BrewingService {
 
     private final BeerRepository beerRepository;
     private final BeerInventoryService beerInventoryService;
-    private JmsTemplate jmsTemplate;
-    private BeerMapper beerMapper;
+    private final JmsTemplate jmsTemplate;
+    private final BeerMapper beerMapper;
 
     @Scheduled(fixedRate = 5000)
     public void checkForLowInventory() {

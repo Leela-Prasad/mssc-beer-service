@@ -53,10 +53,12 @@ public class BeerDto implements Serializable {
 
     // These needs to set by Persistence Layer
     @Null
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ", shape=JsonFormat.Shape.STRING)
     private OffsetDateTime createdDate;
 
     // These needs to set by Persistence Layer
     @Null
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ", shape=JsonFormat.Shape.STRING)
     private OffsetDateTime lastModifiedDate;
 
     @JsonSerialize(using = LocalDateSerializer.class)
